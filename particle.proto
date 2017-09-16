@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+// Partical is something you send the local collector
+// the local collector adds time and host context
+message Partical {
+  oneof partical {
+    Log log = 1;
+  }
+}
+
+enum Severity {
+  EMERGENCY = 0;
+  ALERT = 1;
+  CRITICAL = 2;
+  ERROR = 3;
+  WARNING = 4;
+  NOTICE = 5;
+  INFORMATIONAL = 6;
+  DEBUG = 7;
+}
+
+message Log {
+  string service = 23;
+  string program = 1;
+  string message = 2; 
+  Severity severity = 3;
+  map<string,FieldValue> fields = 4;
+  string stack = 5;
+  string version = 6;
+  repeated string tree = 7;
+  double rate = 8;
+}
+
+// Control is sent back to the library upon connect
+message Control {
+  Severity severity = 1;
+  double rate = 2;
+}
+
+message FieldValue {
+  oneof value {
+    string string = 1;
+    double double = 2;
+    byte ip = 3;
+    string url = 4;
+  }
+}
